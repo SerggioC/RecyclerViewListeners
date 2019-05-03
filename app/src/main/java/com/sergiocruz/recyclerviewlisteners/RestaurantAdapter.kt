@@ -23,7 +23,7 @@ import kotlin.collections.LinkedHashMap
 
 class RestaurantAdapter(
     private val data: List<Mesa>?,
-    private val sorter: (view: View?, position: Int?) -> Unit,
+    private val sorter: ((view: View?, position: Int?) -> Unit?)?,
     private val inflater: LayoutInflater
 ) :
     RecyclerView.Adapter<RestaurantAdapter.RestaurantViewHolder>() {

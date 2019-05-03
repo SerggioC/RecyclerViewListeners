@@ -11,6 +11,7 @@ import android.view.View
 import android.view.View.GONE
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.orhanobut.logger.Logger
 import com.sergiocruz.recyclerviewlisteners.MainActivity.Field
@@ -83,10 +84,33 @@ class MainActivity : AppCompatActivity(), RecyclerViewClickListener {
         recycler.adapter = restaurantAdapter
         recycler.setHasFixedSize(false)
 
+        button3.setOnClickListener {
+            ProductsDialog().show(supportFragmentManager, "cenas")
+        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             animateAVD()
         }
 
+    }
+    fun showDialog() {
+        val fragmentManager = supportFragmentManager
+        val newFragment = ProductsDialog()
+
+        val mIsLargeLayout = false
+        if (mIsLargeLayout) {
+            // The device is using a large layout, so show the fragment as a dialog
+            newFragment.show(fragmentManager, "dialog")
+        } else {
+            // The device is smaller, so show the fragment fullscreen
+            val transaction = fragmentManager.beginTransaction()
+            // For a little polish, specify a transition animation
+            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+            // To make it fullscreen, use the 'content' root view as the container
+            // for the fragment, which is always the root view for the activity
+            transaction.add(android.R.id.content, newFragment)
+                .addToBackStack(null).commit()
+        }
     }
 
     sealed class SortOrder {
@@ -123,140 +147,144 @@ class MainActivity : AppCompatActivity(), RecyclerViewClickListener {
     override fun onClickRecycler(view: View?, position: Int) {
     }
 
-    private val restaurantData: List<Mesa> = listOf(
-        Mesa(
-            0, "Mesa do canto", mutableListOf(
-                Product(0, "Batatas", 2, 1.5f),
-                Product(1, "Ananás", 4, 2.5f),
-                Product(2, "Bitoque de vaca", 6, 8.5f),
-                Product(3, "Feijoada de Chocos", 7, 7.5f),
-                Product(4, "Bolo de Beterraba", 8, 1.5f),
-                Product(5, "Cupcakes de Android", 5, 1.25f),
-                Product(6, "Gingerbread", 14, 1.5f),
-                Product(7, "Froyos", 7, 0.5f),
-                Product(8, "Mel com Café", 2, 1.5f),
-                Product(9, "Ice Cream", 5, 15f),
-                Product(10, "Jelly Beans", 20, .15f)
-            )
-        ),
-        Mesa(
-            0, "Mesa do Meio 1", mutableListOf(
-                Product(0, "Mel com Café", 2, 1.5f),
-                Product(1, "Batatas", 2, 1.6f),
-                Product(2, "Ananás", 4, 2.5f),
-                Product(3, "Bitoque de vaca", 2, 8.5f),
-                Product(4, "Feijoada de Chocos", 2, 7.5f),
-                Product(5, "Froyos", 7, 0.5f),
-                Product(6, "Ice Cream", 5, 15f),
-                Product(7, "Cupcakes de Android", 5, 1.25f),
-                Product(8, "Jelly Beans", 20, .15f),
-                Product(9, "Bolo de Beterraba", 2, 1.7f),
-                Product(10, "Gingerbread", 14, 1.8f)
-            )
-        ),
-        Mesa(
-            0, "Mesa da entrada", mutableListOf(
-                Product(0, "Feijoada de Chocos", 2, 7.5f),
-                Product(1, "Bitoque de vaca", 2, 8.5f),
-                Product(2, "Batatas", 2, 1.5f),
-                Product(3, "Ananás", 4, 2.5f),
-                Product(4, "Froyos", 7, 0.5f),
-                Product(5, "Mel com Café", 2, 1.5f),
-                Product(6, "Ice Cream", 5, 15f),
-                Product(7, "Cupcakes de Android", 5, 1.25f),
-                Product(8, "Jelly Beans", 20, .15f),
-                Product(9, "Bolo de Beterraba", 2, 1.5f),
-                Product(10, "Gingerbread", 14, 1.5f),
-                Product(11, "Lagosta estrelada", 12, 21.5f)
-            )
-        ),
+    companion object {
+        val restaurantData: List<Mesa> = listOf(
+            Mesa(
+                0, "Mesa do canto", mutableListOf(
+                    Product(0, "Batatas", 2, 1.5f),
+                    Product(1, "Ananás", 4, 2.5f),
+                    Product(2, "Bitoque de vaca", 6, 8.5f),
+                    Product(3, "Feijoada de Chocos", 7, 7.5f),
+                    Product(4, "Bolo de Beterraba", 8, 1.5f),
+                    Product(5, "Cupcakes de Android", 5, 1.25f),
+                    Product(6, "Gingerbread", 14, 1.5f),
+                    Product(7, "Froyos", 7, 0.5f),
+                    Product(8, "Mel com Café", 2, 1.5f),
+                    Product(9, "Ice Cream", 5, 15f),
+                    Product(10, "Jelly Beans", 20, .15f)
+                )
+            ),
+            Mesa(
+                0, "Mesa do Meio 1", mutableListOf(
+                    Product(0, "Mel com Café", 2, 1.5f),
+                    Product(1, "Batatas", 2, 1.6f),
+                    Product(2, "Ananás", 4, 2.5f),
+                    Product(3, "Bitoque de vaca", 2, 8.5f),
+                    Product(4, "Feijoada de Chocos", 2, 7.5f),
+                    Product(5, "Froyos", 7, 0.5f),
+                    Product(6, "Ice Cream", 5, 15f),
+                    Product(7, "Cupcakes de Android", 5, 1.25f),
+                    Product(8, "Jelly Beans", 20, .15f),
+                    Product(9, "Bolo de Beterraba", 2, 1.7f),
+                    Product(10, "Gingerbread", 14, 1.8f)
+                )
+            ),
+            Mesa(
+                0, "Mesa da entrada", mutableListOf(
+                    Product(0, "Feijoada de Chocos", 2, 7.5f),
+                    Product(1, "Bitoque de vaca", 2, 8.5f),
+                    Product(2, "Batatas", 2, 1.5f),
+                    Product(3, "Ananás", 4, 2.5f),
+                    Product(4, "Froyos", 7, 0.5f),
+                    Product(5, "Mel com Café", 2, 1.5f),
+                    Product(6, "Ice Cream", 5, 15f),
+                    Product(7, "Cupcakes de Android", 5, 1.25f),
+                    Product(8, "Jelly Beans", 20, .15f),
+                    Product(9, "Bolo de Beterraba", 2, 1.5f),
+                    Product(10, "Gingerbread", 14, 1.5f),
+                    Product(11, "Lagosta estrelada", 12, 21.5f)
+                )
+            ),
 
-        Mesa(
-            0, "Mesa da entrada", mutableListOf(
-                Product(0, "Feijoada de Chocos", 2, 7.5f),
-                Product(1, "Bitoque de vaca", 2, 8.5f),
-                Product(2, "Batatas", 2, 1.5f),
-                Product(3, "Ananás", 4, 2.5f),
-                Product(4, "Froyos", 7, 0.5f),
-                Product(5, "Mel com Café", 2, 1.5f),
-                Product(6, "Ice Cream", 5, 15f),
-                Product(7, "Cupcakes de Android", 5, 1.25f),
-                Product(8, "Jelly Beans", 20, .15f),
-                Product(9, "Bolo de Beterraba", 2, 1.5f),
-                Product(10, "Gingerbread", 14, 1.5f),
-                Product(11, "Lagosta estrelada", 12, 21.5f)
-            )
-        ),
+            Mesa(
+                0, "Mesa da entrada", mutableListOf(
+                    Product(0, "Feijoada de Chocos", 2, 7.5f),
+                    Product(1, "Bitoque de vaca", 2, 8.5f),
+                    Product(2, "Batatas", 2, 1.5f),
+                    Product(3, "Ananás", 4, 2.5f),
+                    Product(4, "Froyos", 7, 0.5f),
+                    Product(5, "Mel com Café", 2, 1.5f),
+                    Product(6, "Ice Cream", 5, 15f),
+                    Product(7, "Cupcakes de Android", 5, 1.25f),
+                    Product(8, "Jelly Beans", 20, .15f),
+                    Product(9, "Bolo de Beterraba", 2, 1.5f),
+                    Product(10, "Gingerbread", 14, 1.5f),
+                    Product(11, "Lagosta estrelada", 12, 21.5f)
+                )
+            ),
 
-        Mesa(
-            0, "Mesa da entrada", mutableListOf(
-                Product(0, "Feijoada de Chocos", 2, 7.5f),
-                Product(1, "Bitoque de vaca", 2, 8.5f),
-                Product(2, "Batatas", 2, 1.5f),
-                Product(3, "Ananás", 4, 2.5f),
-                Product(4, "Froyos", 7, 0.5f),
-                Product(5, "Mel com Café", 2, 1.5f),
-                Product(6, "Ice Cream", 5, 15f),
-                Product(7, "Cupcakes de Android", 5, 1.25f),
-                Product(8, "Jelly Beans", 20, .15f),
-                Product(9, "Bolo de Beterraba", 2, 1.5f),
-                Product(10, "Gingerbread", 14, 1.5f),
-                Product(11, "Lagosta estrelada", 12, 21.5f)
-            )
-        ),
+            Mesa(
+                0, "Mesa da entrada", mutableListOf(
+                    Product(0, "Feijoada de Chocos", 2, 7.5f),
+                    Product(1, "Bitoque de vaca", 2, 8.5f),
+                    Product(2, "Batatas", 2, 1.5f),
+                    Product(3, "Ananás", 4, 2.5f),
+                    Product(4, "Froyos", 7, 0.5f),
+                    Product(5, "Mel com Café", 2, 1.5f),
+                    Product(6, "Ice Cream", 5, 15f),
+                    Product(7, "Cupcakes de Android", 5, 1.25f),
+                    Product(8, "Jelly Beans", 20, .15f),
+                    Product(9, "Bolo de Beterraba", 2, 1.5f),
+                    Product(10, "Gingerbread", 14, 1.5f),
+                    Product(11, "Lagosta estrelada", 12, 21.5f)
+                )
+            ),
 
-        Mesa(
-            0, "Mesa da entrada", mutableListOf(
-                Product(0, "Feijoada de Chocos", 2, 7.5f),
-                Product(1, "Bitoque de vaca", 2, 8.5f),
-                Product(2, "Batatas", 2, 1.5f),
-                Product(3, "Ananás", 4, 2.5f),
-                Product(4, "Froyos", 7, 0.5f),
-                Product(5, "Mel com Café", 2, 1.5f),
-                Product(6, "Ice Cream", 5, 15f),
-                Product(7, "Cupcakes de Android", 5, 1.25f),
-                Product(8, "Jelly Beans", 20, .15f),
-                Product(9, "Bolo de Beterraba", 2, 1.5f),
-                Product(10, "Gingerbread", 14, 1.5f),
-                Product(11, "Lagosta estrelada", 12, 21.5f)
-            )
-        ),
+            Mesa(
+                0, "Mesa da entrada", mutableListOf(
+                    Product(0, "Feijoada de Chocos", 2, 7.5f),
+                    Product(1, "Bitoque de vaca", 2, 8.5f),
+                    Product(2, "Batatas", 2, 1.5f),
+                    Product(3, "Ananás", 4, 2.5f),
+                    Product(4, "Froyos", 7, 0.5f),
+                    Product(5, "Mel com Café", 2, 1.5f),
+                    Product(6, "Ice Cream", 5, 15f),
+                    Product(7, "Cupcakes de Android", 5, 1.25f),
+                    Product(8, "Jelly Beans", 20, .15f),
+                    Product(9, "Bolo de Beterraba", 2, 1.5f),
+                    Product(10, "Gingerbread", 14, 1.5f),
+                    Product(11, "Lagosta estrelada", 12, 21.5f)
+                )
+            ),
 
-        Mesa(
-            0, "Mesa da entrada", mutableListOf(
-                Product(0, "Feijoada de Chocos", 2, 7.5f),
-                Product(1, "Bitoque de vaca", 2, 8.5f),
-                Product(2, "Batatas", 2, 1.5f),
-                Product(3, "Ananás", 4, 2.5f),
-                Product(4, "Froyos", 7, 0.5f),
-                Product(5, "Mel com Café", 2, 1.5f),
-                Product(6, "Ice Cream", 5, 15f),
-                Product(7, "Cupcakes de Android", 5, 1.25f),
-                Product(8, "Jelly Beans", 20, .15f),
-                Product(9, "Bolo de Beterraba", 2, 1.5f),
-                Product(10, "Gingerbread", 14, 1.5f),
-                Product(11, "Lagosta estrelada", 12, 21.5f)
-            )
-        ),
+            Mesa(
+                0, "Mesa da entrada", mutableListOf(
+                    Product(0, "Feijoada de Chocos", 2, 7.5f),
+                    Product(1, "Bitoque de vaca", 2, 8.5f),
+                    Product(2, "Batatas", 2, 1.5f),
+                    Product(3, "Ananás", 4, 2.5f),
+                    Product(4, "Froyos", 7, 0.5f),
+                    Product(5, "Mel com Café", 2, 1.5f),
+                    Product(6, "Ice Cream", 5, 15f),
+                    Product(7, "Cupcakes de Android", 5, 1.25f),
+                    Product(8, "Jelly Beans", 20, .15f),
+                    Product(9, "Bolo de Beterraba", 2, 1.5f),
+                    Product(10, "Gingerbread", 14, 1.5f),
+                    Product(11, "Lagosta estrelada", 12, 21.5f)
+                )
+            ),
 
-        Mesa(
-            0, "Mesa da entrada", mutableListOf(
-                Product(0, "Feijoada de Chocos", 2, 7.5f),
-                Product(1, "Bitoque de vaca", 2, 8.5f),
-                Product(2, "Batatas", 2, 1.5f),
-                Product(3, "Ananás", 4, 2.5f),
-                Product(4, "Froyos", 7, 0.5f),
-                Product(5, "Mel com Café", 2, 1.5f),
-                Product(6, "Ice Cream", 5, 15f),
-                Product(7, "Cupcakes de Android", 5, 1.25f),
-                Product(8, "Jelly Beans", 20, .15f),
-                Product(9, "Bolo de Beterraba", 2, 1.5f),
-                Product(10, "Gingerbread", 14, 1.5f),
-                Product(11, "Lagosta estrelada", 12, 21.5f)
+            Mesa(
+                0, "Mesa da entrada", mutableListOf(
+                    Product(0, "Feijoada de Chocos", 2, 7.5f),
+                    Product(1, "Bitoque de vaca", 2, 8.5f),
+                    Product(2, "Batatas", 2, 1.5f),
+                    Product(3, "Ananás", 4, 2.5f),
+                    Product(4, "Froyos", 7, 0.5f),
+                    Product(5, "Mel com Café", 2, 1.5f),
+                    Product(6, "Ice Cream", 5, 15f),
+                    Product(7, "Cupcakes de Android", 5, 1.25f),
+                    Product(8, "Jelly Beans", 20, .15f),
+                    Product(9, "Bolo de Beterraba", 2, 1.5f),
+                    Product(10, "Gingerbread", 14, 1.5f),
+                    Product(11, "Lagosta estrelada", 12, 21.5f)
+                )
             )
+
         )
 
-    )
+
+    }
 
     val data: Array<Person> = arrayOf(
         Person("1", "Elsie", "eponten0@jimdo,com"),
