@@ -7,10 +7,13 @@ import android.animation.ValueAnimator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AnticipateOvershootInterpolator
 import android.widget.LinearLayout
 import androidx.core.view.children
+import androidx.core.view.marginTop
 import androidx.recyclerview.widget.RecyclerView
 import com.sergiocruz.recyclerviewlisteners.MainActivity.Field
 import com.sergiocruz.recyclerviewlisteners.MainActivity.Field.*
@@ -19,6 +22,9 @@ import kotlinx.android.synthetic.main.item_restaurant.view.*
 import java.util.*
 import kotlin.Comparator
 import kotlin.collections.LinkedHashMap
+import com.orhanobut.logger.Logger.t
+
+
 
 
 class RestaurantAdapter(
@@ -30,11 +36,20 @@ class RestaurantAdapter(
 
     init {
         setHasStableIds(true)
+
+    }
+
+
+    fun getParams(): ViewGroup.MarginLayoutParams {
+        val params: ViewGroup.MarginLayoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT)
+        params.topMargin = 4
+        return params
     }
 
     override fun getItemCount() = data?.size ?: 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RestaurantViewHolder {
+
         val restaurantView = inflater.inflate(R.layout.item_restaurant, parent, false)
         return RestaurantViewHolder(restaurantView)
     }
@@ -54,6 +69,7 @@ class RestaurantAdapter(
             val row: View = inflater.inflate(R.layout.item_product_mesa, null, false)
             val productHolder = bindProductRow(row, product)
             productHolder.rotateX()
+            productHolder.layoutParams = getParams()
             linearLayout.addView(productHolder)
         }
     }
