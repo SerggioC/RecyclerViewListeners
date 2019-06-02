@@ -30,7 +30,7 @@ class ProductsDialog : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val popupAdapter = RestaurantAdapter(MainActivity.restaurantData, null, localInflater)
+        val popupAdapter = RestaurantAdapter(MainActivity.restaurantData, localInflater)
         popupRecycler.layoutManager =
             LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         popupRecycler.adapter = popupAdapter

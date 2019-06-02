@@ -3,17 +3,15 @@ package com.sergiocruz.recyclerviewlisteners
 import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
-import android.animation.ValueAnimator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.view.animation.AccelerateDecelerateInterpolator
-import android.view.animation.AnticipateOvershootInterpolator
 import android.widget.LinearLayout
 import androidx.core.view.children
-import androidx.core.view.marginTop
+import androidx.core.view.get
 import androidx.recyclerview.widget.RecyclerView
 import com.sergiocruz.recyclerviewlisteners.MainActivity.Field
 import com.sergiocruz.recyclerviewlisteners.MainActivity.Field.*
@@ -22,35 +20,34 @@ import kotlinx.android.synthetic.main.item_restaurant.view.*
 import java.util.*
 import kotlin.Comparator
 import kotlin.collections.LinkedHashMap
-import com.orhanobut.logger.Logger.t
-
-
 
 
 class RestaurantAdapter(
     private val data: List<Mesa>?,
-    private val sorter: ((view: View?, position: Int?) -> Unit?)?,
     private val inflater: LayoutInflater
 ) :
     RecyclerView.Adapter<RestaurantAdapter.RestaurantViewHolder>() {
 
     init {
         setHasStableIds(true)
-
     }
 
 
-    fun getParams(): ViewGroup.MarginLayoutParams {
-        val params: ViewGroup.MarginLayoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT)
+    private fun getParams(): ViewGroup.MarginLayoutParams {
+        val params: ViewGroup.MarginLayoutParams =
+            ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT)
         params.topMargin = 4
         return params
     }
 
     override fun getItemCount() = data?.size ?: 0
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RestaurantViewHolder {
+    private lateinit var parent: ViewGroup
 
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RestaurantViewHolder {
+        this.parent = parent
         val restaurantView = inflater.inflate(R.layout.item_restaurant, parent, false)
+        //val restaurantView = inflater.inflate(R.layout.item_restaurant, null)
         return RestaurantViewHolder(restaurantView)
     }
 
@@ -66,7 +63,7 @@ class RestaurantAdapter(
         if (productList == null || linearLayout == null) return
         linearLayout.removeAllViews()
         for (product in productList) {
-            val row: View = inflater.inflate(R.layout.item_product_mesa, null, false)
+            val row: View = inflater.inflate(R.layout.item_product_mesa, null)
             val productHolder = bindProductRow(row, product)
             productHolder.rotateX()
             productHolder.layoutParams = getParams()
@@ -152,10 +149,12 @@ class RestaurantAdapter(
             val rotateX = ObjectAnimator.ofFloat(previousView, "rotationX", -280f, -360f)
             val alpha = ObjectAnimator.ofFloat(previousView, "alpha", 0.75f, 1f)
             val direction = if (previousView?.y ?: 0f > newView?.y ?: 0f) 1 else -1
-            val animX = ObjectAnimator.ofFloat(previousView, "x",
+            val animX = ObjectAnimator.ofFloat(
+                previousView, "x",
                 0f,
                 20f * direction,
-                0f)
+                0f
+            )
 
             val animScaleX = ObjectAnimator.ofFloat(previousView, "scaleX", 1f, 2f, 1f)
             val animScaleY = ObjectAnimator.ofFloat(previousView, "scaleY", 1f, 2f, 1f)
@@ -180,6 +179,7 @@ class RestaurantAdapter(
 
                 override fun onAnimationEnd(animation: Animator?) {
                     isAnimating = false
+                    //realignHeihgts(linearLayout)
                 }
 
                 override fun onAnimationCancel(animation: Animator?) {
@@ -194,6 +194,14 @@ class RestaurantAdapter(
         }
 
 
+    }
+
+    private fun realignHeihgts(linearLayout: LinearLayout?) {
+        linearLayout?.children?.forEachIndexed { index, view ->
+            if (index == 0) return@forEachIndexed
+            val previouws = linearLayout.get(index - 1)
+            view.top = previouws.top + previouws.height + 2
+        }
     }
 
     var isAnimating = false
@@ -251,7 +259,7 @@ private fun View.rotateX() {
 
     AnimatorSet().apply {
         duration = 300
-//        interpolator = AccelerateDecelerateInterpolator()
+        interpolator = AccelerateDecelerateInterpolator()
 //        interpolator = AnticipateOvershootInterpolator()
         playTogether(rotateX, alpha)
         start()

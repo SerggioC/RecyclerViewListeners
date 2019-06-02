@@ -8,33 +8,30 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.row_item.view.*
 
-class PersonAdapter constructor(
+class PersonAdapter(
     private val data: Array<Person>?,
     private val listener: RecyclerViewClickListener,
-    private val thisFun: ((view: View?, position: Int?) -> Boolean),
-    private val anotherFun: ((position: Int?) -> Boolean)
+    private val layoutInflater: LayoutInflater
 ) :
     RecyclerView.Adapter<PersonAdapter.PersonViewHolder>() {
 
     override fun getItemCount() = data?.size ?: 0
 
-    private var viewHolderCount = 0
-
     @SuppressLint("SetTextI18n")
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PersonViewHolder {
-        val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.row_item, parent, false)
-        val personViewHolder = PersonViewHolder(view)
-        personViewHolder.theId?.text = "HC= $viewHolderCount"
-        viewHolderCount++
-        return personViewHolder
+        val view = layoutInflater.inflate(R.layout.row_item, parent, false)
+        return PersonViewHolder(view)
     }
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: PersonViewHolder, position: Int) {
         val person = data?.get(position)
 
-        holder.nome?.text = " ID=${person?.id} P-> $position AP-> ${holder.adapterPosition}"
+        holder.apply {
+            theId?.text = "ID=${person?.id}"
+            nome?.text = person?.name
+            email?.text = person?.email
+        }
 
     }
 
@@ -55,7 +52,6 @@ class PersonAdapter constructor(
 
         override fun onClick(view: View?) {
             listener.onClickRecycler(view, adapterPosition)
-            thisFun(view, adapterPosition)
         }
 
     }

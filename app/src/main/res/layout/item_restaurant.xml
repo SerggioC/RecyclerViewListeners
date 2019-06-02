@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/cardview_style_background"
     android:padding="2dp"
     android:layout_marginTop="4dp"
@@ -13,15 +14,17 @@
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
         android:background="@drawable/cardview_style_header_background"
         android:padding="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/theId"
-        android:layout_width="wrap_content"
+        android:layout_width="30dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:minWidth="20dp"
@@ -34,29 +37,31 @@
         android:id="@+id/nome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginEnd="8dp"
         android:text="Nome"
         app:layout_constraintBottom_toBottomOf="@+id/theId"
+        app:layout_constraintEnd_toStartOf="@+id/quantidade"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/theId"
         app:layout_constraintTop_toTopOf="@+id/theId" />
 
     <TextView
         android:id="@+id/quantidade"
-        android:layout_width="wrap_content"
+        android:layout_width="77dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="textEnd"
+        android:layout_marginEnd="1dp"
         android:text="Quantidade"
+        android:textAlignment="textEnd"
         app:layout_constraintBottom_toBottomOf="@+id/theId"
         app:layout_constraintEnd_toStartOf="@+id/price"
         app:layout_constraintTop_toTopOf="@+id/theId" />
 
     <TextView
         android:id="@+id/price"
-        android:layout_width="wrap_content"
+        android:layout_width="40dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:minWidth="50dp"
         android:textAlignment="textEnd"
         android:text="Preço"
         app:layout_constraintBottom_toBottomOf="@+id/quantidade"
@@ -65,12 +70,15 @@
 
     <LinearLayout
         android:id="@+id/content"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
         android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/header" />
+        app:layout_constraintTop_toBottomOf="@+id/header"
+        tools:layout_height="100dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

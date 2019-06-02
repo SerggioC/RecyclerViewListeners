@@ -4,13 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/cardview_style"
     android:layout_marginTop="10dp"
-    >
+    android:background="@drawable/cardview_style">
 
     <TextView
         android:id="@+id/theId"
-        android:layout_width="wrap_content"
+        android:layout_width="30dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
@@ -19,23 +18,26 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="@tools:sample/us_zipcodes" />
+        tools:text="12" />
 
     <TextView
         android:id="@+id/nome"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginEnd="1dp"
         app:layout_constraintBottom_toBottomOf="@+id/theId"
+        app:layout_constraintEnd_toStartOf="@+id/quantidade"
         app:layout_constraintStart_toEndOf="@+id/theId"
         app:layout_constraintTop_toTopOf="@+id/theId"
         tools:text="Favas com Batata doce" />
 
     <TextView
         android:id="@+id/quantidade"
-        android:layout_width="wrap_content"
+        android:layout_width="77dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="1dp"
+        android:textAlignment="viewEnd"
         app:layout_constraintBottom_toBottomOf="@+id/nome"
         app:layout_constraintEnd_toStartOf="@+id/price"
         app:layout_constraintTop_toTopOf="@+id/nome"
@@ -43,15 +45,13 @@
 
     <TextView
         android:id="@+id/price"
-        android:layout_width="wrap_content"
+        android:layout_width="40dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:minWidth="50dp"
+        android:layout_marginEnd="8dp"
         android:textAlignment="textEnd"
         app:layout_constraintBottom_toBottomOf="@+id/quantidade"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/quantidade"
         tools:text="4.75€" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
