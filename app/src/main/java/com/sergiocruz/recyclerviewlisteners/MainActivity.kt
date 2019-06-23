@@ -1,5 +1,7 @@
 package com.sergiocruz.recyclerviewlisteners
 
+import android.app.Application
+import android.content.Context
 import android.graphics.drawable.Animatable2
 import android.graphics.drawable.AnimatedVectorDrawable
 import android.graphics.drawable.Drawable
@@ -9,6 +11,7 @@ import android.view.View
 import android.view.View.GONE
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.AndroidViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
@@ -16,7 +19,12 @@ import com.sergiocruz.recyclerviewlisteners.MainActivity.Field
 import com.sergiocruz.recyclerviewlisteners.MainActivity.SortOrder
 import com.sergiocruz.recyclerviewlisteners.PersonAdapter.RecyclerViewClickListener
 import kotlinx.android.synthetic.main.activity_main.*
+import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
+import org.koin.core.qualifier.named
+import org.koin.core.scope.Scope
 
 annotation class BuedaFixe
 
@@ -55,6 +63,20 @@ class MainActivity : AppCompatActivity(), RecyclerViewClickListener {
         //PersonAdapter(personData, this, layoutInflater)
         //recycler.adapter = RestaurantAdapter(restaurantData, layoutInflater)
 
+        // lazy inject MyViewModel
+        val myViewModel: MyViewModel by viewModel()
+
+
+        // lazy inject shared MyViewModel in fragment
+//        val myViewModel2 : MyViewModel by sharedViewModel()
+
+
+        // Get ViewModel by given KCLass
+        val simpleViewModel: MyViewModel by viewModel(clazz = MyViewModel::class) { parametersOf("DEFAULT_ID") }
+
+        // Get ViewModels by name
+        val vm1: MyViewModel by viewModel(named("vm1")) { parametersOf("vm1") }
+        val vm2: MyViewModel by viewModel(named("vm2")) { parametersOf("vm2") }
 
     }
 
@@ -307,6 +329,10 @@ class MainActivity : AppCompatActivity(), RecyclerViewClickListener {
         )
 
     }
+
+}
+
+class MyViewModel(app: Application) : AndroidViewModel(app) {
 
 }
 
