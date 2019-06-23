@@ -5,50 +5,55 @@ import android.graphics.drawable.AnimatedVectorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.util.Log
 import android.view.View
 import android.view.View.GONE
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.sergiocruz.recyclerviewlisteners.MainActivity.Field
 import com.sergiocruz.recyclerviewlisteners.MainActivity.SortOrder
 import com.sergiocruz.recyclerviewlisteners.PersonAdapter.RecyclerViewClickListener
 import kotlinx.android.synthetic.main.activity_main.*
-
+import org.koin.android.ext.android.inject
 
 annotation class BuedaFixe
 
 class MainActivity : AppCompatActivity(), RecyclerViewClickListener {
 
-
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onCreate(savedInstanceState, persistentState)
-
-        val theClass = SomeClass()
-
-        val theListener: (Boolean, String) -> Unit = { activate, what ->
-            Log.i("Sergio> ", "What: $what is $activate")
-        }
-        theClass.setInterface(theListener)
-
-
-    }
+    private val theInjectedPersonAdapter: PersonAdapter by inject()
+    private val theInjectedRestaurantAdapter: RestaurantAdapter by inject()
 
     @BuedaFixe
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+//
+//        // or directly get any instance
+//        val someAdapter : PersonAdapter = get()
+
+        button.setOnClickListener {
+
+            if (recycler.adapter is RestaurantAdapter) {
+                recycler.adapter = theInjectedPersonAdapter
+                theInjectedPersonAdapter.swapData(personData, this)
+            } else {
+                recycler.adapter = theInjectedRestaurantAdapter
+                theInjectedRestaurantAdapter.swapData(restaurantData)
+            }
+
+        }
+
         recycler.setHasFixedSize(true)
         recycler.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
 
-        //recycler.adapter = PersonAdapter(personData, this, layoutInflater)
+        recycler.adapter = theInjectedPersonAdapter
+        theInjectedPersonAdapter.swapData(personData, this)
 
-        recycler.adapter = RestaurantAdapter(restaurantData, layoutInflater)
+        //PersonAdapter(personData, this, layoutInflater)
+        //recycler.adapter = RestaurantAdapter(restaurantData, layoutInflater)
 
 
     }
@@ -85,85 +90,85 @@ class MainActivity : AppCompatActivity(), RecyclerViewClickListener {
     }
 
     override fun onClickRecycler(view: View?, position: Int) {
-        Toast.makeText(this, "clickasmaki", Toast.LENGTH_SHORT).show()
+        Snackbar.make(recycler, "snacking $position", Snackbar.LENGTH_SHORT).show()
     }
 
     companion object {
 
         val personData: Array<Person> = arrayOf(
-            Person("1", "Elsie", "eponten0@jimdo,com"),
-            Person("2", "Annalise", "averty1@jimdo,com"),
-            Person("3", "Shaughn", "shecks2@ucla,edu"),
-            Person("4", "Garwin", "gdami3@slideshare,net"),
-            Person("5", "Rockwell", "dbaggiani8@jimdo,com"),
-            Person("6", "Maurene", "mriceards5@webmd,com"),
-            Person("1", "Elsie", "eponten0@jimdo,com"),
-            Person("2", "Annalise", "averty1@jimdo,com"),
-            Person("3", "Shaughn", "shecks2@ucla,edu"),
-            Person("4", "Garwin", "gdami3@slideshare,net"),
-            Person("5", "Rockwell", "dbaggiani8@jimdo,com"),
-            Person("6", "Maurene", "mriceards5@webmd,com"),
-            Person("1", "Elsie", "eponten0@jimdo,com"),
-            Person("2", "Annalise", "averty1@jimdo,com"),
-            Person("3", "Shaughn", "shecks2@ucla,edu"),
-            Person("4", "Garwin", "gdami3@slideshare,net"),
-            Person("5", "Rockwell", "dbaggiani8@jimdo,com"),
-            Person("6", "Maurene", "mriceards5@webmd,com"),
-            Person("1", "Elsie", "eponten0@jimdo,com"),
-            Person("2", "Annalise", "averty1@jimdo,com"),
-            Person("3", "Shaughn", "shecks2@ucla,edu"),
-            Person("4", "Garwin", "gdami3@slideshare,net"),
-            Person("5", "Rockwell", "dbaggiani8@jimdo,com"),
-            Person("6", "Maurene", "mriceards5@webmd,com"),
-            Person("1", "Elsie", "eponten0@jimdo,com"),
-            Person("2", "Annalise", "averty1@jimdo,com"),
-            Person("3", "Shaughn", "shecks2@ucla,edu"),
-            Person("4", "Garwin", "gdami3@slideshare,net"),
-            Person("5", "Rockwell", "dbaggiani8@jimdo,com"),
-            Person("6", "Maurene", "mriceards5@webmd,com"),
-            Person("1", "Elsie", "eponten0@jimdo,com"),
-            Person("2", "Annalise", "averty1@jimdo,com"),
-            Person("3", "Shaughn", "shecks2@ucla,edu"),
-            Person("4", "Garwin", "gdami3@slideshare,net"),
-            Person("5", "Rockwell", "dbaggiani8@jimdo,com"),
-            Person("6", "Maurene", "mriceards5@webmd,com"),
-            Person("1", "Elsie", "eponten0@jimdo,com"),
-            Person("2", "Annalise", "averty1@jimdo,com"),
-            Person("3", "Shaughn", "shecks2@ucla,edu"),
-            Person("4", "Garwin", "gdami3@slideshare,net"),
-            Person("5", "Rockwell", "dbaggiani8@jimdo,com"),
-            Person("6", "Maurene", "mriceards5@webmd,com"),
-            Person("1", "Elsie", "eponten0@jimdo,com"),
-            Person("2", "Annalise", "averty1@jimdo,com"),
-            Person("3", "Shaughn", "shecks2@ucla,edu"),
-            Person("4", "Garwin", "gdami3@slideshare,net"),
-            Person("5", "Rockwell", "dbaggiani8@jimdo,com"),
-            Person("6", "Maurene", "mriceards5@webmd,com"),
-            Person("1", "Elsie", "eponten0@jimdo,com"),
-            Person("2", "Annalise", "averty1@jimdo,com"),
-            Person("3", "Shaughn", "shecks2@ucla,edu"),
-            Person("4", "Garwin", "gdami3@slideshare,net"),
-            Person("5", "Rockwell", "dbaggiani8@jimdo,com"),
-            Person("6", "Maurene", "mriceards5@webmd,com"),
-            Person("1", "Elsie", "eponten0@jimdo,com"),
-            Person("2", "Annalise", "averty1@jimdo,com"),
-            Person("3", "Shaughn", "shecks2@ucla,edu"),
-            Person("4", "Garwin", "gdami3@slideshare,net"),
-            Person("5", "Rockwell", "dbaggiani8@jimdo,com"),
-            Person("6", "Maurene", "mriceards5@webmd,com"),
-            Person("1", "Elsie", "eponten0@jimdo,com"),
-            Person("2", "Annalise", "averty1@jimdo,com"),
-            Person("3", "Shaughn", "shecks2@ucla,edu"),
-            Person("4", "Garwin", "gdami3@slideshare,net"),
-            Person("5", "Rockwell", "dbaggiani8@jimdo,com"),
-            Person("6", "Maurene", "mriceards5@webmd,com"),
-            Person("1", "Elsie", "eponten0@jimdo,com"),
-            Person("2", "Annalise", "averty1@jimdo,com"),
-            Person("3", "Shaughn", "shecks2@ucla,edu"),
-            Person("4", "Garwin", "gdami3@slideshare,net"),
-            Person("5", "Rockwell", "dbaggiani8@jimdo,com"),
-            Person("6", "Maurene", "mriceards5@webmd,com"),
-            Person("7", "Shep", "sjohncey6@samsung,com")
+            Person(false, "1", "Elsie", "eponten0@jimdo,com"),
+            Person(false, "2", "Annalise", "averty1@jimdo,com"),
+            Person(false, "3", "Shaughn", "shecks2@ucla,edu"),
+            Person(false, "4", "Garwin", "gdami3@slideshare,net"),
+            Person(false, "5", "Rockwell", "dbaggiani8@jimdo,com"),
+            Person(false, "6", "Maurene", "mriceards5@webmd,com"),
+            Person(false, "1", "Elsie", "eponten0@jimdo,com"),
+            Person(false, "2", "Annalise", "averty1@jimdo,com"),
+            Person(false, "3", "Shaughn", "shecks2@ucla,edu"),
+            Person(false, "4", "Garwin", "gdami3@slideshare,net"),
+            Person(false, "5", "Rockwell", "dbaggiani8@jimdo,com"),
+            Person(false, "6", "Maurene", "mriceards5@webmd,com"),
+            Person(false, "1", "Elsie", "eponten0@jimdo,com"),
+            Person(false, "2", "Annalise", "averty1@jimdo,com"),
+            Person(false, "3", "Shaughn", "shecks2@ucla,edu"),
+            Person(false, "4", "Garwin", "gdami3@slideshare,net"),
+            Person(false, "5", "Rockwell", "dbaggiani8@jimdo,com"),
+            Person(false, "6", "Maurene", "mriceards5@webmd,com"),
+            Person(false, "1", "Elsie", "eponten0@jimdo,com"),
+            Person(false, "2", "Annalise", "averty1@jimdo,com"),
+            Person(false, "3", "Shaughn", "shecks2@ucla,edu"),
+            Person(false, "4", "Garwin", "gdami3@slideshare,net"),
+            Person(false, "5", "Rockwell", "dbaggiani8@jimdo,com"),
+            Person(false, "6", "Maurene", "mriceards5@webmd,com"),
+            Person(false, "1", "Elsie", "eponten0@jimdo,com"),
+            Person(false, "2", "Annalise", "averty1@jimdo,com"),
+            Person(false, "3", "Shaughn", "shecks2@ucla,edu"),
+            Person(false, "4", "Garwin", "gdami3@slideshare,net"),
+            Person(false, "5", "Rockwell", "dbaggiani8@jimdo,com"),
+            Person(false, "6", "Maurene", "mriceards5@webmd,com"),
+            Person(false, "1", "Elsie", "eponten0@jimdo,com"),
+            Person(false, "2", "Annalise", "averty1@jimdo,com"),
+            Person(false, "3", "Shaughn", "shecks2@ucla,edu"),
+            Person(false, "4", "Garwin", "gdami3@slideshare,net"),
+            Person(false, "5", "Rockwell", "dbaggiani8@jimdo,com"),
+            Person(false, "6", "Maurene", "mriceards5@webmd,com"),
+            Person(false, "1", "Elsie", "eponten0@jimdo,com"),
+            Person(false, "2", "Annalise", "averty1@jimdo,com"),
+            Person(false, "3", "Shaughn", "shecks2@ucla,edu"),
+            Person(false, "4", "Garwin", "gdami3@slideshare,net"),
+            Person(false, "5", "Rockwell", "dbaggiani8@jimdo,com"),
+            Person(false, "6", "Maurene", "mriceards5@webmd,com"),
+            Person(false, "1", "Elsie", "eponten0@jimdo,com"),
+            Person(false, "2", "Annalise", "averty1@jimdo,com"),
+            Person(false, "3", "Shaughn", "shecks2@ucla,edu"),
+            Person(false, "4", "Garwin", "gdami3@slideshare,net"),
+            Person(false, "5", "Rockwell", "dbaggiani8@jimdo,com"),
+            Person(false, "6", "Maurene", "mriceards5@webmd,com"),
+            Person(false, "1", "Elsie", "eponten0@jimdo,com"),
+            Person(false, "2", "Annalise", "averty1@jimdo,com"),
+            Person(false, "3", "Shaughn", "shecks2@ucla,edu"),
+            Person(false, "4", "Garwin", "gdami3@slideshare,net"),
+            Person(false, "5", "Rockwell", "dbaggiani8@jimdo,com"),
+            Person(false, "6", "Maurene", "mriceards5@webmd,com"),
+            Person(false, "1", "Elsie", "eponten0@jimdo,com"),
+            Person(false, "2", "Annalise", "averty1@jimdo,com"),
+            Person(false, "3", "Shaughn", "shecks2@ucla,edu"),
+            Person(false, "4", "Garwin", "gdami3@slideshare,net"),
+            Person(false, "5", "Rockwell", "dbaggiani8@jimdo,com"),
+            Person(false, "6", "Maurene", "mriceards5@webmd,com"),
+            Person(false, "1", "Elsie", "eponten0@jimdo,com"),
+            Person(false, "2", "Annalise", "averty1@jimdo,com"),
+            Person(false, "3", "Shaughn", "shecks2@ucla,edu"),
+            Person(false, "4", "Garwin", "gdami3@slideshare,net"),
+            Person(false, "5", "Rockwell", "dbaggiani8@jimdo,com"),
+            Person(false, "6", "Maurene", "mriceards5@webmd,com"),
+            Person(false, "1", "Elsie", "eponten0@jimdo,com"),
+            Person(false, "2", "Annalise", "averty1@jimdo,com"),
+            Person(false, "3", "Shaughn", "shecks2@ucla,edu"),
+            Person(false, "4", "Garwin", "gdami3@slideshare,net"),
+            Person(false, "5", "Rockwell", "dbaggiani8@jimdo,com"),
+            Person(false, "6", "Maurene", "mriceards5@webmd,com"),
+            Person(false, "7", "Shep", "sjohncey6@samsung,com")
         )
 
         val restaurantData: List<Mesa> = listOf(
@@ -303,7 +308,6 @@ class MainActivity : AppCompatActivity(), RecyclerViewClickListener {
 
     }
 
-
 }
 
 
@@ -324,7 +328,12 @@ data class Mesa(
 
 data class Product(val id: Int?, val name: String?, val quantity: Int = 0, val price: Float = 0.0f)
 
-data class Person(var id: String? = null, var name: String? = null, var email: String? = null) {
+data class Person(
+    var checked: Boolean,
+    var id: String? = null,
+    var name: String? = null,
+    var email: String? = null
+) {
 
     override fun toString(): String {
         return "Person id = $id, name = $name, email = $email"

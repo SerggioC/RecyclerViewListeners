@@ -23,7 +23,6 @@ import kotlin.collections.LinkedHashMap
 
 
 class RestaurantAdapter(
-    private val data: List<Mesa>?,
     private val inflater: LayoutInflater
 ) :
     RecyclerView.Adapter<RestaurantAdapter.RestaurantViewHolder>() {
@@ -32,6 +31,12 @@ class RestaurantAdapter(
         setHasStableIds(true)
     }
 
+    private var data: List<Mesa>? = null
+
+    fun swapData(data: List<Mesa>?) {
+        this.data = data
+        notifyDataSetChanged()
+    }
 
     private fun getParams(): ViewGroup.MarginLayoutParams {
         val params: ViewGroup.MarginLayoutParams =

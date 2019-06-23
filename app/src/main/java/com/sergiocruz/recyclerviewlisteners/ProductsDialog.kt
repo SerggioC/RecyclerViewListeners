@@ -13,6 +13,8 @@ import kotlinx.android.synthetic.main.popup_layout.*
 import android.util.TypedValue
 import android.util.DisplayMetrics
 import androidx.constraintlayout.widget.ConstraintSet.MATCH_CONSTRAINT_SPREAD
+import org.koin.android.ext.android.inject
+import org.koin.core.context.GlobalContext.get
 
 class ProductsDialog : DialogFragment() {
 
@@ -30,10 +32,10 @@ class ProductsDialog : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val popupAdapter = RestaurantAdapter(MainActivity.restaurantData, localInflater)
+        val popupAdapter = inject<RestaurantAdapter>()
         popupRecycler.layoutManager =
             LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-        popupRecycler.adapter = popupAdapter
+        popupRecycler.adapter = popupAdapter.value
 
         okButton.setOnClickListener { dismiss() }
         cancelButton.setOnClickListener { dismiss() }
